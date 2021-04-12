@@ -1,9 +1,9 @@
 const express = require("express");
 const app = express();
 const port = 8000;
-
 app.use(express.json());
 
+//! Demo Data
 const productList = [
   {
     id: 1,
@@ -17,7 +17,10 @@ const productList = [
   },
 ];
 
+//! Getting Total Price
 const totalPrice = productList.reduce((acc, val) => acc.price + val.price);
+
+//! Getting Product List
 const list = `<h1>Products</h1>
   ${productList
     .map(
@@ -31,14 +34,17 @@ const list = `<h1>Products</h1>
     .join("")}
     <hr/><h3>Total Price: ${totalPrice}</h3>`;
 
+//! GET Request
 app.get("/", (req, res) => {
   res.send("hello world!");
 });
 
+//! Request with Status Code
 app.get("/wishlist", (req, res) => {
   res.status(201).send(list);
 });
 
+//! GET Request with id, status and message
 app.get("/wishlist/:id", (req, res) => {
   const { id } = req.params;
   const data = productList.find((product) => product.id == id);
@@ -47,16 +53,18 @@ app.get("/wishlist/:id", (req, res) => {
     : res.status(404).json({ data, success: false, message: "no found" });
 });
 
-app.post("/wishlist/", (req, res) => {
+//! POST request
+app.post("/wishlist", (req, res) => {
   const { name, price } = req.body;
-  productList.push({ id: Date.now(), name, price });
+  productList.push({ id: 3, name, price });
   res.status(201).json({
-    list: productList,
+    productList,
     success: true,
     message: "Product added",
   });
 });
 
+//! PORT info
 app.listen(port, () => {
   console.log(`Example app running on ${port}`);
 });
